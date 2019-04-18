@@ -1,12 +1,13 @@
 import turtle 
 import random
 import time 
+import math
 
 #create main window
 wn = turtle.Screen()
 wn.title("Jumping Avenger by Sanjana")
-wn.setup(height = 700, width = 1000)
-wn.bgcolor("brown")
+wn.setup(height = 800, width = 1200)
+wn.bgcolor("darkblue")
 wn.tracer(0)
 
 #number of lives 
@@ -22,22 +23,24 @@ class Border(turtle.Turtle):
 		self.penup()
 		self.hideturtle()
 		self.speed(0)
-		self.color("black")
 		self.pensize(5)
 
 #ESTABLISH AVENGER
 class Player(turtle.Turtle):
 	def __init__(self):
 		turtle.Turtle.__init__(self)
-		self.shape("triangle")
-		self.color("yellow")
+		self.shape("square")
+		self.shapesize(stretch_wid = 5, stretch_len=2, outline = None)
+		self.color("red")
 		self.speed(0)
 		self.penup()
 		self.direction = "Left"
 		self.goto(0, -250)
 		self.speed = 3
 		self.state = "running"
-		self.dy = 0 
+		self.dy = 0
+		self.width = 40
+		self.height = 100
 
 #move avenger
 	def move(self): 
@@ -65,7 +68,7 @@ class Player(turtle.Turtle):
 				self.dy = 0
 			
 		# Border checking
-		if self.xcor() > 50 or self.xcor() < -50: 
+		if self.xcor() > 150 or self.xcor() < -150: 
 			self.speed = 0
 			self.direction = "none"
 
@@ -85,37 +88,61 @@ class Player(turtle.Turtle):
 
 obstacles = []
 
-#CREATE OBSTACLE 
+#CREATE FIRST OBSTACLE 
 class Obstacle(turtle.Turtle):
 	def __init__(self):
 		turtle.Turtle.__init__(self)
 		self.penup()
 		self.speed(0)
-		self.shape("circle")
-		self.color("black")
+		self.shape("square")
+		self.color("white")
 		self.speed = 0
+		self.direction = "right"
 		self.speed = random.randint(1,3)
-		self.goto(random.randint(-250, 250), random.randint(-250, -250))
-		self.setheading(5)
+		self.goto(random.randint(-270, -220), random.randint(-240, -220))
+		self.setheading(0)
+		self.width = 20
+		self.height = 20
+		
+		#make if statement to get the obstacles coming out from the left side
+		if self.goto == -270 or self.goto  == -240: 
+			self.goto(random.randint(-270, -220), random.randint(-240, -220))
+	
 
 	def move(self):
 		self.forward(self.speed) 
 		
-		if self.ycor() < - 270:
-			self.sety(400)
-	
-	
+		if self.ycor() < -250:
+			self.sety(50)
+
+#CREATE SECOND OBSTACLE 
+#class Obstacle1(turtle.Turtle):
+#	def __init__(self):
+#		turtle.Turtle.__init__(self)
+#		self.shape("square")
+#		self.color("grey")
+
 #NUMBER OF LIVES
 class Pen(turtle.Turtle):
 	def __init__(self):
 		turtle.Turtle.__init__(self)
 		self.write("Lives: {}" .format(lives), align = "center", font = ("Courier", 24, "normal"))
 
+#COLLISION
+def is_collision(self, sprite_1, sprite_2):
+	# Axis Aligned Bounding Box
+	x_collision = (math.fabs(sprite_1.xcor() - sprite_2.xcor()) * 2) < (sprite_1.width + sprite_2.width)
+	y_collision = (math.fabs(sprite_1.ycor() - sprite_2.ycor()) * 2) < (sprite_1.height + sprite_2.height)
+	return (x_collision and y_collision)
+
+
 #CREATE INSTANCES
 player = Player()
 border = Border()
 pen = Pen()
 obstacles = []
+
+#get an extra life from above
 
 #create loops 
 for count in range(6):
@@ -135,6 +162,6 @@ while True:
 	
 	for obstacle in obstacles:
 		obstacle.move()
-	
+
 
 wn.mainloop()
