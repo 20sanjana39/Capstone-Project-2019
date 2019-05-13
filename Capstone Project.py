@@ -1,5 +1,5 @@
 #SANJANA RAPETA - CAPSTONE PROJECT 
-
+import os
 import turtle 
 import random
 import time 
@@ -164,9 +164,10 @@ class Game(turtle.Turtle):
 		self.speed(0)
 		self.color("white")
 		self.speed = 0 
+		self.ht()
 	
 	def play_sound(self,filename):
-		os.system("afplay {}&".format(filename))
+		("afplay {}&".format(filename))
 
 #establish number of lives
 class Pen(turtle.Turtle):
@@ -215,7 +216,7 @@ while True:
 			
 		if is_collision(obstacle, player):
 			player.change_number_of_lives(+1)
-			game.play_sound("obstacle.mp3")
+			os.system("afplay obstacle.mp3&")
 			obstacle.goto(random.randint(-1400, -700), -190), (random.randint(-1800, -700), -190), (random.randint(-1700, -700), -190)
 			
 	for bonus in bonuses: 
@@ -223,7 +224,7 @@ while True:
 		if bonus.ycor() < -270:
 			bonus.sety(400)
 		if is_collision(bonus, player):
-			game.play_sound("bonus.mp3")
+			os.system("afplay bonus.mp3&")
 			player.change_number_of_lives(-1)
 			bonus.goto(random.randint(-250, 600), random.randint(250, 600))
 
